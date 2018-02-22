@@ -5,3 +5,6 @@ authors = [ "Philipp Brüll <pb@simia.tech>" ]
 
 [lib]
 crate-type = ["staticlib"]
+
+[dependencies]
+rlibc = "1.0"
