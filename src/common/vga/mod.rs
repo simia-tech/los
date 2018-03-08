@@ -1,7 +1,7 @@
 
 mod color;
 mod console;
-mod screen;
+pub mod screen;
 
 pub use self::color::Color;
 pub use self::console::Console;

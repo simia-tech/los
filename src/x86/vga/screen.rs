@@ -26,24 +26,26 @@ impl vga::Screen for Screen {
         BUFFER_WIDTH
     }
 
-    fn set(&mut self, x: usize, y: usize, c: u8, fg: vga::Color, bg: vga::Color) {
+    fn set(&mut self, x: usize, y: usize, c: u8, fg: vga::Color, bg: vga::Color) -> vga::screen::Result<()> {
         if x >= self.width() || y >= self.height() {
-            return;
+            return Err(vga::screen::Error::OutOfBounds);
         }
 
         unsafe { self.buffer.as_mut() }.chars[y][x].write(ScreenChar {
             ascii_character: c,
             color_code: ColorCode::new(fg, bg),
         });
+
+        Ok(())
     }
 
-    fn get(&self, x: usize, y: usize) -> (u8, vga::Color, vga::Color) {
+    fn get(&self, x: usize, y: usize) -> vga::screen::Result<(u8, vga::Color, vga::Color)> {
         if x >= self.width() || y >= self.height() {
-            return (0, vga::Color::White, vga::Color::Black);
+            return Err(vga::screen::Error::OutOfBounds);
         }
 
         let sc = unsafe { self.buffer.as_ref() }.chars[y][x].read();
-        (sc.ascii_character, sc.color_code.foreground(), sc.color_code.background())
+        Ok((sc.ascii_character, sc.color_code.foreground(), sc.color_code.background()))
     }
 
 }
